@@ -1,9 +1,40 @@
 version: "3.8"
 services:
+  
+  front-end:
+    image: frontend-node
+    ports: 
+      - 8080:3000
+    networks:
+      - front-to-back
+
+  back-end:
+    image: backend-node
+    ports:
+      - 3001:3001
+    networks:
+      - back-to-db
+      - front-to-back
+
   mongo:
     image: mongo
     restart: always
     environment: 
       MONGODB_INITDB_ROOT_USERNAME: username
       MONGODB_INITDB_ROOT_PASSWORD: password
+    volumes:
+        - ./data:/data/db
+        - ./logs:/var/logs
+    networks:
+      - back-to-db
+
+networks:
+  front-to-back:
+    driver: bridge
+  back-to-db:
+    driver: bridge
+
+
+
+  
     
